@@ -1,6 +1,6 @@
 package com.learn.spring.todoapp.controller;
 
-import com.learn.spring.todoapp.dto.Todo;
+import com.learn.spring.todoapp.entity.Todo;
 import com.learn.spring.todoapp.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -78,4 +78,6 @@ public class TodoController {
                 SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
+
+    
 }

@@ -1,7 +1,8 @@
 package com.learn.spring.todoapp.service;
 
-import com.learn.spring.todoapp.dto.Todo;
 import org.springframework.stereotype.Service;
+
+import com.learn.spring.todoapp.entity.Todo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

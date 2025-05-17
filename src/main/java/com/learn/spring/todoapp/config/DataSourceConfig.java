@@ -26,9 +26,10 @@ public class DataSourceConfig {
     // @Value("${spring.datasource.password:}")
     // private String datasourcePassword;
 
+    // Ensure this DataSource bean is preferred
     @Bean
-    @Primary // Ensure this DataSource bean is preferred
-    public DataSource dataSource() {
+    @Primary
+    DataSource dataSource() {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(datasourceDriverClassName);
         dataSourceBuilder.url(datasourceUrl);

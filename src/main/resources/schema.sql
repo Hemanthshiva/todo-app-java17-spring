@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS todo;
 -- Create todo table with SQLite-compatible syntax
 CREATE TABLE IF NOT EXISTS todo (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
-    description TEXT NOT NULL,
-    target_date DATE NOT NULL,
-    done INTEGER NOT NULL DEFAULT 0
+    username VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    target_date TEXT NOT NULL,
+    done BOOLEAN NOT NULL DEFAULT 0
 );
 
 -- Create users table with SQLite-compatible syntax

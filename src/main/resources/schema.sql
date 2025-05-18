@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS todo (
 CREATE TABLE IF NOT EXISTS users (
     username TEXT PRIMARY KEY,
     password TEXT NOT NULL,
+    email TEXT,
     enabled INTEGER NOT NULL DEFAULT 1
 );
 

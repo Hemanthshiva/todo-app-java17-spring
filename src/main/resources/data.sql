@@ -1,6 +1,6 @@
 -- Add default user (username: user, password: password)
-insert into users (username, password, enabled)
-values('user', '$2a$10$3zHzb.Npv1hfZbLEU5qsdOju/tk2je6W6PnNnY.c1ujWPcZh4PL6e', 1);
+insert into users (username, password, email, enabled)
+values('user', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user@example.com', 1);
 
 insert into authorities (username, authority)
 values('user', 'ROLE_USER');

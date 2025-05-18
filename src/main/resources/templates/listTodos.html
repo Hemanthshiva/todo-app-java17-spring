@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}"
+      lang="en">
+<head>
+  <title>Todo List</title>
+  <th:block layout:fragment="styles">
     <style>
       .todo-table {
         margin-top: 2rem;
@@ -32,7 +30,6 @@
       .table-striped tbody tr:nth-of-type(odd) {
         background-color: rgba(0, 0, 0, 0.02);
       }
-
       .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -42,15 +39,17 @@
         padding: 0.5rem 0.75rem;
       }
     </style>
-  </head>
-  <body>
+  </th:block>
+</head>
+<body>
+  <div layout:fragment="content">
     <div class="container">
       <div class="todo-header text-center">
         <h1>Your Todos</h1>
       </div>
 
       <div class="table-responsive todo-table">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" data-testid="todo-table">
           <thead class="table-light">
             <tr>
               <th>Description</th>
@@ -64,23 +63,21 @@
               <td th:text="${todo.description}" th:class="${todo.done} ? 'completed' : ''"></td>
               <td th:text="${#temporals.format(todo.targetDate, 'yyyy-MM-dd')}"></td>
               <td class="text-center">
-                <span th:if="${todo.done}" class="badge bg-success">Completed</span>
-                <span th:unless="${todo.done}" class="badge bg-warning">Pending</span>
+                <span th:if="${todo.done}" class="badge bg-success" th:data-testid="'todo-status-' + ${todo.id}">Completed</span>
+                <span th:unless="${todo.done}" class="badge bg-warning" th:data-testid="'todo-status-' + ${todo.id}">Pending</span>
               </td>
               <td class="action-buttons">
-                <a th:href="@{/update-todo(id=${todo.id})}" class="btn btn-primary btn-sm">Update</a>
-                <a th:href="@{/delete-todo(id=${todo.id})}" class="btn btn-danger btn-sm">Delete</a>
+                <a th:href="@{/update-todo(id=${todo.id})}" class="btn btn-primary btn-sm" th:data-testid="'todo-edit-button-' + ${todo.id}">Update</a>
+                <a th:href="@{/delete-todo(id=${todo.id})}" class="btn btn-danger btn-sm" th:data-testid="'todo-delete-button-' + ${todo.id}">Delete</a>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="text-center add-todo-btn">
-        <a href="/add-todo" class="btn btn-success">Add New Todo</a>
+        <a href="/add-todo" class="btn btn-success" data-testid="todo-add-button">Add New Todo</a>
       </div>
     </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  </div>
+</body>
 </html>

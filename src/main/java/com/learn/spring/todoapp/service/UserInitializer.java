@@ -1,9 +1,9 @@
 package com.learn.spring.todoapp.service;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.learn.spring.todoapp.entity.User;
+import com.learn.spring.todoapp.repository.AuthorityRepository;
+import com.learn.spring.todoapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -11,24 +11,35 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class UserInitializer {
 
-    private final UserDetailsManager userDetailsManager;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserInitializer(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder) {
-        this.userDetailsManager = userDetailsManager;
+    public UserInitializer(UserRepository userRepository, 
+                          AuthorityRepository authorityRepository,
+                          PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
     public void init() {
-        if (!userDetailsManager.userExists("user")) {
-            UserDetails user = User.builder()
-                    .username("user")
-                    .password(passwordEncoder.encode("password"))
-                    .roles("USER")
-                    .build();
-            userDetailsManager.createUser(user);
-            System.out.println("User created: " + user.getUsername());
+        // Check if default user exists
+        if (!userRepository.existsByUsername("user")) {
+            // Create default user
+            User user = new User(
+                "user",
+                passwordEncoder.encode("password"),
+                "user@example.com"
+            );
+            userRepository.save(user);
+
+            // Add authorities
+            authorityRepository.addAuthority("user", "ROLE_USER");
+            authorityRepository.addAuthority("user", "ROLE_ADMIN");
+
+            System.out.println("Default user created: " + user.getUsername());
         }
     }
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Todo App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <!-- Additional styles -->
+    <th:block layout:fragment="styles"></th:block>
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/welcome" data-testid="link-home">Todo App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/welcome" data-testid="link-home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/list-todos" data-testid="link-todos">Todos</a>
+                    </li>
+                </ul>
+                <div class="d-flex" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <span class="navbar-text me-3" data-testid="header-username" 
+                          th:text="${#authentication.principal.username}">Username</span>
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-outline-light" type="submit" data-testid="logout-button">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-4">
+        <div layout:fragment="content">
+            <!-- Page content will be inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">© 2025 TODO App</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Additional scripts -->
+    <th:block layout:fragment="scripts"></th:block>
+</body>
+</html>

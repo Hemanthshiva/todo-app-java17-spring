@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/default}"
       lang="en">
 <head>
-  <title th:text="${todo.id == 0} ? 'Add Todo' : 'Edit Todo'">Todo Form</title>
+  <title>Todo Form</title>
   <th:block layout:fragment="styles">
     <style>
       .todo-form {
@@ -39,10 +39,6 @@
       .btn-action {
         margin: 0 0.5rem;
       }
-      .form-check-input:checked {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-      }
     </style>
   </th:block>
 </head>
@@ -50,23 +46,22 @@
   <div layout:fragment="content">
     <div class="container">
       <div class="todo-header text-center">
-        <h1 th:text="${todo.id == 0} ? 'Add New Todo' : 'Edit Todo'">Todo Form</h1>
+        <h1>Enter Todo Details</h1>
       </div>
 
       <div class="todo-form">
-        <form method="post" th:action="${todo.id == 0} ? @{/add-todo} : @{/update-todo}" th:object="${todo}">
-          <input type="hidden" th:field="*{id}" />
-
+        <form method="post" th:action="${todo.id == 0} ? @{add-todo} : @{update-todo}" th:object="${todo}">
           <div class="form-group">
-            <label for="description">Description</label>
-            <input type="text" class="form-control" th:field="*{description}" required 
-                   placeholder="Enter todo description" data-testid="form-description">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" id="description" th:field="*{description}" required 
+                   class="form-control" placeholder="Enter todo description" data-testid="form-description">
             <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
           </div>
 
           <div class="form-group">
-            <label for="targetDate">Target Date</label>
-            <input type="date" class="form-control" th:field="*{targetDate}" required data-testid="form-targetDate">
+            <label for="targetDate" class="form-label">Target Date</label>
+            <input type="date" id="targetDate" th:field="*{targetDate}" required 
+                   class="form-control" data-testid="form-targetDate">
             <small class="text-danger" th:if="${#fields.hasErrors('targetDate')}" th:errors="*{targetDate}"></small>
           </div>
 
@@ -77,9 +72,10 @@
             </div>
           </div>
 
+          <input type="hidden" th:field="*{id}" />
+
           <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary btn-action" data-testid="form-submit-button" 
-                    th:text="${todo.id == 0} ? 'Add Todo' : 'Update Todo'">Submit</button>
+            <button type="submit" class="btn btn-primary btn-action" data-testid="form-submit-button">Save</button>
             <a href="/list-todos" class="btn btn-secondary btn-action">Cancel</a>
           </div>
         </form>

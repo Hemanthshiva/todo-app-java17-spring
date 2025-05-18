@@ -1,10 +1,14 @@
 package com.learn.spring.todoapp.controller;
 
 import com.learn.spring.todoapp.dto.UserRegistrationDto;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.learn.spring.todoapp.entity.User;
+import com.learn.spring.todoapp.repository.AuthorityRepository;
+import com.learn.spring.todoapp.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,15 +17,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
+import java.util.List;
 
 @Controller
 public class UserController {
 
-    private final UserDetailsManager userDetailsManager;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder) {
-        this.userDetailsManager = userDetailsManager;
+    public UserController(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -31,16 +38,21 @@ public class UserController {
         return "register";
     }
 
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login";
+    }
+
     @PostMapping("/register")
     public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto, BindingResult result, Model model) {
         if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
             result.rejectValue("confirmPassword", "user.confirmPassword.mismatch", "Passwords do not match");
         }
 
-        if (userDetailsManager.userExists(userDto.getUsername())) {
+        if (userRepository.existsByUsername(userDto.getUsername())) {
             result.rejectValue("username", "user.username.exists", "Username already exists");
         }
-        
+
         // Basic email validation (can be enhanced)
         if (userDto.getEmail() == null || userDto.getEmail().isEmpty() || !userDto.getEmail().contains("@")) {
             result.rejectValue("email", "user.email.invalid", "Invalid email format");
@@ -50,15 +62,25 @@ public class UserController {
             return "register";
         }
 
-        UserDetails user = User.builder()
-                .username(userDto.getUsername())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .roles("USER") // Assign a default role
-                .build();
-        userDetailsManager.createUser(user);
+        // Create and save the user entity
+        User user = new User(
+                userDto.getUsername(),
+                passwordEncoder.encode(userDto.getPassword()),
+                userDto.getEmail()
+        );
+        userRepository.save(user);
 
-        // Optionally, you can add a success message
-        // model.addAttribute("registrationSuccess", true);
-        return "redirect:/login?registerSuccess";
+        // Add ROLE_USER authority
+        authorityRepository.addAuthority(userDto.getUsername(), "ROLE_USER");
+
+        // Auto-login after registration
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDto.getUsername(),
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return "redirect:/welcome";
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.learn.spring.todoapp.entity.Todo;
+import com.learn.spring.todoapp.repository.TodoRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -56,13 +57,13 @@ public class TodoControllerJpa {
     }
 
     @GetMapping("delete-todo")
-    public String deleteTodo(@RequestParam Long id) {
+    public String deleteTodo(@RequestParam Integer id) {
         todoRepository.deleteById(id);
         return "redirect:list-todos";
     }
 
     @GetMapping("update-todo")
-    public String showUpdateTodoPage(@RequestParam Long id, ModelMap model) {
+    public String showUpdateTodoPage(@RequestParam Integer id, ModelMap model) {
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid todo Id:" + id));
         model.addAttribute("todo", todo);

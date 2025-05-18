@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
     <style>
       .todo-table {
         margin-top: 2rem;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--card-shadow);
+        background-color: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
       }
       .todo-header {
-        background-color: #f8f9fa;
+        background-color: var(--light-color);
         padding: 2rem 0 1rem 0;
         margin-bottom: 2rem;
         border-bottom: 1px solid #dee2e6;
       }
+      .todo-header h1 {
+        color: var(--primary-color);
+      }
       .add-todo-btn {
         margin-top: 2rem;
+        margin-bottom: 2rem;
       }
       .table-striped tbody tr:nth-of-type(odd) {
         background-color: rgba(0, 0, 0, 0.02);
       }
-      .completed {
-        text-decoration: line-through;
-        color: #6c757d;
+
+      .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+      .badge {
+        padding: 0.5rem 0.75rem;
       }
     </style>
   </head>
@@ -33,7 +48,7 @@
       <div class="todo-header text-center">
         <h1>Your Todos</h1>
       </div>
-      
+
       <div class="table-responsive todo-table">
         <table class="table table-striped table-bordered">
           <thead class="table-light">
@@ -48,11 +63,11 @@
             <tr th:each="todo : ${todos}">
               <td th:text="${todo.description}" th:class="${todo.done} ? 'completed' : ''"></td>
               <td th:text="${#temporals.format(todo.targetDate, 'yyyy-MM-dd')}"></td>
-              <td>
+              <td class="text-center">
                 <span th:if="${todo.done}" class="badge bg-success">Completed</span>
                 <span th:unless="${todo.done}" class="badge bg-warning">Pending</span>
               </td>
-              <td>
+              <td class="action-buttons">
                 <a th:href="@{/update-todo(id=${todo.id})}" class="btn btn-primary btn-sm">Update</a>
                 <a th:href="@{/delete-todo(id=${todo.id})}" class="btn btn-danger btn-sm">Delete</a>
               </td>
@@ -60,7 +75,6 @@
           </tbody>
         </table>
       </div>
-      
       <div class="text-center add-todo-btn">
         <a href="/add-todo" class="btn btn-success">Add New Todo</a>
       </div>

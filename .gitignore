@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Database files ###
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+### Logs ###
+*.log
+logs/
+
+### OS specific files ###
+.DS_Store
+Thumbs.db
+
+### Application specific ###
+application-local.properties
+application-dev.properties
+application-prod.properties

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  todo-app:
+    build: .
+    ports:
+      - "8091:8091"
+    volumes:
+      - todo-data:/data
+    restart: unless-stopped
+
+volumes:
+  todo-data:

@@ -1,11 +1,13 @@
-# Use a base JDK image
-FROM eclipse-temurin:17-jdk-alpine
-
-# Set working directory
+# Build stage
+FROM maven:3.8.5-eclipse-temurin-17-alpine AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the project JAR (build first!)
-COPY target/*.jar app.jar
+# Run stage
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
 # Create directory for SQLite DB
 VOLUME /data

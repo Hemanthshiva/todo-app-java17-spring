@@ -63,19 +63,15 @@ This application can be containerized and run using Docker. Below are instructio
 ### Prerequisites
 
 - Docker installed on your machine
-- Java 17 and Maven installed (for building the JAR)
 
 ### Building the Docker Image
 
-1. First, build the application JAR file:
-   ```bash
-   mvn clean package
-   ```
+Build the Docker image:
+```bash
+docker build -t todo-app .
+```
 
-2. Build the Docker image:
-   ```bash
-   docker build -t todo-app .
-   ```
+The Dockerfile uses a multi-stage build process that automatically compiles the application, so you don't need to build the JAR file separately.
 
 ### Running Locally with Docker
 

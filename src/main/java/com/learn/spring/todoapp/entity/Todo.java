@@ -20,7 +20,7 @@ import lombok.Setter;
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "username", insertable = false, updatable = false)
     private String username;
@@ -49,9 +49,20 @@ public class Todo {
         this.done = done;
     }
 
-    // Helper method to set both user and username
+    // Helper method to set both user and username and maintain bidirectional relationship
     public void setUser(User user) {
+        // Remove from old user's todos list if exists
+        if (this.user != null && this.user.getTodos() != null) {
+            this.user.getTodos().remove(this);
+        }
+
+        // Set new user
         this.user = user;
         this.username = user != null ? user.getUsername() : null;
+
+        // Add to new user's todos list if exists
+        if (user != null && user.getTodos() != null) {
+            user.getTodos().add(this);
+        }
     }
 }

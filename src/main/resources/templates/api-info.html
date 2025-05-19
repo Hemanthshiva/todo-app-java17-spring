@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <title>API Information</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1>API Information</h1>
+        
+        <h2>Swagger UI</h2>
+        <p>You can access the Swagger UI documentation for this application at:</p>
+        <a href="/swagger-ui/index.html" target="_blank" class="btn btn-primary">Open Swagger UI</a>
+        
+        <h2>Todo API Endpoints</h2>
+        <p>This application primarily uses MVC controllers to serve HTML views rather than REST API endpoints. 
+           However, you can interact with the Todo functionality through the following URLs:</p>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>HTTP Method</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>/list-todos</td>
+                    <td>GET</td>
+                    <td>Lists all todos for the logged-in user</td>
+                </tr>
+                <tr>
+                    <td>/add-todo</td>
+                    <td>GET</td>
+                    <td>Shows the page to add a new todo</td>
+                </tr>
+                <tr>
+                    <td>/add-todo</td>
+                    <td>POST</td>
+                    <td>Adds a new todo</td>
+                </tr>
+                <tr>
+                    <td>/delete-todo?id={id}</td>
+                    <td>GET</td>
+                    <td>Deletes a todo with the specified ID</td>
+                </tr>
+                <tr>
+                    <td>/update-todo?id={id}</td>
+                    <td>GET</td>
+                    <td>Shows the page to update a todo with the specified ID</td>
+                </tr>
+                <tr>
+                    <td>/update-todo</td>
+                    <td>POST</td>
+                    <td>Updates a todo</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Note</h3>
+        <p>The application is running on port 8091, so you can access it at <code>http://localhost:8091</code>.</p>
+        <p>The Swagger UI can be accessed at <code>http://localhost:8091/swagger-ui/index.html</code>.</p>
+    </div>
+</body>
+</html>
